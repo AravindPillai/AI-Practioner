@@ -1,0 +1,269 @@
+Sections
+
+	1. Fundamentals of AI and ML - 20%
+	2. Fundamentals of Generateive AI - 24%
+	3. Applications of Foundation Models 28%
+	4. Guidelines of Responsible AI - 14%
+	5. Security , Compliance, Governance of AI solutions - 14%
+
+
+• GPT - Generative Pre trained Transformers is a Transformer model based on Deep learning
+• Tempertaure determines the likelyhood of response. Varies from 0 to 1 and is most likely at 0.7. Lower temperatures means more concentrated response. Higher means more diverse response.
+• Epoch is the number of time the model has to run to train itself.
+• Antrhropomorphism is the way of  attribution of human traits, emotions, or intentions to non-human entities, such as animals, objects, or natural forces. It is commonly used in literature, art, and storytelling to make non-human characters more relatable.
+• Bias happens because of training data. Actively working to miitgate it during training.
+• Prompts are input provided to AI System that guide the output.
+	• Texts, Videos, Imgages and gestures
+	
+	• Decision tree is for classification
+	• SVM ( support vector machine) are used for regressions
+	• 
+	
+Antatomy of prompts
+	• Objective - goazl of prompts
+	• Proovice a context - additional information provided . Say summering a document then document ist he context
+	• Markers are used to mark specific context, response marker, context marker or instruction marker 
+
+• Zero short learning makes predictions on tasks or domains that the model hasn’t explicitly trained on
+• Linear regression is basically numerical values stock prices and weather.
+
+Amazon Bedrock
+
+	• Managed AWS service to use and access Foundation Models via API's
+		○ sUpports models from AWS,Cohere and stablity.ai 
+			§ The ones offering are A121 labs - 
+				□ Jurassic model
+			§ Titan Foundational model provided by Amazon is a general purpose FM. I t is good for text generation capability
+			§ Anthropic
+			§ Cohere
+			§ Meta Lama models
+			§ Stability AI - generating detailed images on text descriptions and image to image translations
+		○ Foundational models are trained on very large amount of data unlike the specifc models
+		○ Playgrounds allows access to these models by running inferences on these models
+
+	• In the beginning account wont have any models available , an admin will have to add this
+		○ Text or chat ask for Cohere or Anthropic
+		○ Image - Stability.ai
+	• Inference Parameters can be used to tune the model
+		○ Randomness And Diversity
+			§ Temperature varies from 0 to 1 . O means very concentrated and 1 means diverse. Default is 0.7
+			§ Top P - Focuses on the probability percentile of which tokens are chosen
+				□ Value below 1 means top percentile is chosen and excludes less probable ones
+				□ This leads to more consistent and repetitive completions
+			§ Length of the response from 200 - 8192 tokens. Helps to adjust the response length.
+			§ Stop Sequence - specify character sequence to indicate where the model to sop text generation
+			§ Repetitive -  allows how repetitive results will be from your results
+				□ Presence penality -  Higher number decreases the probability of the token in request or response from repeating
+				□ Count penalty, Frequence Penalty  - they both do the same as  presence penalty while creating the token.
+			§ Penalize Special tokens, reduces the special tokens that are repeated  including whtie spce, emojis, punctuatoins, stop words and numbers
+	• Model Metrics helps to identify the overall latency , input token count , cost etc
+	• Model Evaluation has 3 modes
+		○ Automatic
+			§ Run entirely by AWS to identify a single models capabilities for  specific task wither with own or predefined prompt set such as giga word or BoolQ
+			§ The things metrics that can be captured for automatic evaluation are
+				□ Toxicity  the inclination to produce toxic content harmful, insensitive
+				□ Accuracy
+				□ Robustness - How the output of model preserves semantic meaning with minor changes in input
+					® BOLD - Bias in open ended language dataset is used to evaluate fairness in english lanugage. It consist of 23,679 different text generation dnad fairness measurement across many domains like profession, gender, race and religious ideologies and politcs
+					® Real toxicity prompts is used to evaluate toxicity in languge
+					® Trex - large scale alignment of Natural language with Knowledge base Triples is used to generate a subject, predicate and an object linked by relation for NLP
+					® WikiText2 - huggung face dataset for prompts used for general text generation.
+			§ Dataset - can choose individual dataset to evaluate each matrix
+			§ The dataset stored in S3 will be automatically encrypted
+			
+		○ Human bring your own work team
+		○ Human - Aws managed work team
+			§ Both above human models allows humans to judge the response so can ensure that the output aligns with the org brand voice and style 
+		○ Unlike automatic you can only evaluate up to 2 models
+		○ Matrix is human involved evaluation uses
+			§ Thumbs up or down
+			§ Likert scale - 1 to 5 scale
+			§ Ordinal Rank - provide a rank for the response from 1
+			§ Liker scale comparison
+		○ Defining the workforce is all done by using email address managed by amazon sage maker ground truth. This can be employees within the company or external SME teams.
+		○ Amazon sage maker provides extensive array of human involved capabilities enabled users to leverage human feedback through the entire ML lifecycle
+	• Bedrock can be run by 3 different ways
+		○ AWS SDK
+		○ AWS CLI
+		○ Amazon sage maker notebook
+• Amazon Bedrock custom models
+	• Why
+		○ OOB foundation models are generic and can do generic tasks 
+		○ Say you are working on Medical Field then the FM needs to be customized for the same.
+		○ Ways to do it
+			§ Prompt Engineering
+			§ RAG
+			§ Fine tuning 
+				□ Increase performance
+				□ Changing the style of a model or summering data in a specific fie format
+				□ For finetuning we need a dataset, a small number of samples labelled with prompts and completions in JSONL file format.
+			§ Continued Pre training
+				□ Only supported
+					®  by Amazon Titan Text G1 Express
+					® Amazon titan Text G1 Lite
+			§ Custom models, bedrock makes a copy of base model keeps all data within VPC, None of the prompts will be used to train the base model
+		○ For Fine tuning we should pass in JSONL File format. Each will have a prompt and text to completion
+		○ Transfer learning in the context of Large Language Models (LLMs) refers to the practice of taking a pre-trained model (usually on a large, general-purpose dataset) and fine-tuning it for a specific task or domain.
+		○ Even if we use text to image or Image to embedding, we should still use a JSONL dataset.
+			§ Image pagth should be provided in JSONL
+			§ {"imageRef""<path">","Catpion":"<prompt text>"
+		○ In Bedrock either choose fine tuning or continued fine tuning
+			§ Continued fine tuning is chosen when the model has to perform better in a particular domain
+			§ In Continued pretraining one needs a very large dataset. The dataset can be unlabeled and raw and needs to be in JSONL format
+			§ In this case we don’t need both prompt and completion just need the prompt.
+		○ Bedrock allows to choose hyper parameters for training
+			§ Epoch - the number of iterations of the raining data
+			§ Batch size - the number of sample to be processed
+			§ Learning rate - rate at which models are updated after each sample
+			§ Customized bedrock model can be used  in Bedrock playground or used via inference api
+		
+		
+			
+• Amazon s3 bucket names are globally unique
+• Provisioned throughput Bedrock 
+	• Model u need to purchase
+	• Commitment is number of month 1 or 6 months
+	• Rt now aws don’t provide the model units purchase on screen has to work with AWS to get it
+		○ If no commitments then only one MU
+		○ If multiple Months then multiple MU can be used
+• Amazon Bedrock Knowledge Base
+	• How to use agents to connect to external Data sources, basically using RAG
+	• $ steps on building knowledge base
+		○ Provide knowledge base details
+		○ Configure data source
+		○ Select embedding model and Configure Vector store
+		○ Review and create
+	• Knowledge base should be able to access bedrock, s3, Amazon open search or amazon aurora database for vector database. Vector database can be stored in Pinecone or Redis Enterprise
+	• Amazon secrets manager for authentication , KMS will also be enabled
+	• External Datastore can be s3 that supports Plain text, Markups, Html, MS word ,csv ,pdf and MSExcel
+	• If the datastore is encyrpted with KMS, we have to provide the ARN of the key for Bedrock to decrypt
+	• Chunking startgey to split the data source has to be chosen and once chosen it cannot be changed.
+		○ Default Chunking - segments the data into 300 tokens. This can be whole world, beginning of the workd, end , white space
+		○ Fixed will chunk the data into segments of approximately same size m smallest is 20 and maz is 8192
+		○ No chunking where each file becomes a chunk
+	• Data retention policy when the knowledge base is deleted - Retain or delete
+	• We can add upto 5 different datasources
+	• Last step is select embedding model and then choose the vector data source
+		○ Quick create a vector store use Amaon oepnsearch
+		○ This is cheap and only recommended in development. This is cost effective
+		○ The amazon open search vector store is only for non production use case and cannot be migrated to the Production later
+		○ We can choose our own vector store that includes pine cone, auror, redis etc
+		○ Once knowledge base is created we need to perform a sync to ingest data from data source to Knowledge base
+	• Interacting with Knowledge base
+		○ Retrieve and Generate API - allows to perform a query against the KB and generate response. It has the ability to use 5 different bases but will only use one to generate response based on parameters.
+		○ Retrieve API can be used to generate an orchestration within the application to get response from knowledge base
+		○ Amazon Bedrock agents can be used to knowledge base to assist end users in retrieving the data
+			§ This allows to call API's to take action against the knowledge base.
+	• Amazon Bedrock agents are  automated helpers that streamlines development and user interaction
+		○ It helps connect foundation models with data sources and  knowledge bases while managing user engagement and Api requests
+		○ It reduces the coding effort and reducers delivery time.
+		○ It can perform advanced tasks on behalf of user.
+		○ Agents are completely managed by amazon removing the need for infrastructure management, encyrption,permission , prompt engineering
+		○ Agents have 2 
+			§ Build Time Execution 
+				□ To build ,configure and implement the agent and assisutated resources
+					® This stage needs access to foundation model so it can recive user input and generate output
+					® It will require instuctions to understand what tasks needs to be executed
+					® It can also have action groups - Enables to specify special tasks either using Lambda or using API. There can be multiple of them joined together to achieve a result
+					® It has access to optional knowledge bases
+					® Prompt templates - blue print for making promotes into FM , there are 4 standard tempatk4es which can be modified if needed. 
+					® The application will communicate with the agent using the invoke agent API and passing the agentALias ID
+					® agentALias ID alloiws us to have multiple versions of the agent.
+		® Bedrock = Access pre-built generative AI models for application development.
+		® SageMaker = Build, train, and deploy custom machine learning models.
+	• Partial Dependence Plots (PDPs) are useful tools for understanding the relationship between specific features and the model's predictions, making it easier to see how changes in input variables affect the forecast. PDPs are particularly helpful for stakeholders because they visually show the impact of individual features on predictions without requiring a deep understanding of the model's inner workings.
+	A company uses Amazon SageMaker for its ML pipeline in a production environment. The company has large input data sizes up to 1 GB and processing times up to 1 hour. The company needs near real-time latency.Which SageMaker inference option meets these requirements? 
+	
+		§ Real-Time Inference: Immediate responses for high-traffic, low-latency applications. 
+		§ >> Asynchronous Inference: Near real-time for large payloads and longer processing. 
+		§ Batch Transform: Large-scale, offline processing without real-time needs.
+		§  Serverless Inference: Low-latency inference for intermittent or unpredictable traffic without managing infrastructure.
+	• Human-in-the-loop validation combines the efficiency of machine learning with human expertise to ensure high-quality labeled data. Amazon SageMaker Ground Truth Plus enables you to have human labelers validate and correct model predictions, which reduces errors in annotations and increases the accuracy of the training data. This is particularly useful when you need to generate accurate images or annotations for protective eyewear and want to ensure that the annotations are reliable.
+	• Optimized small language models (SLMs) are specifically designed to run efficiently on edge devices with limited resources (such as memory and processing power). Deploying smaller, optimized models directly on the edge devices allows for near-instantaneous inference with minimal latency, as the data doesn't need to travel to a central server for processing.
+	• You can use CloudWatch to gather and view metrics that relate to account resources. You can use CloudWatch to view the number of API calls to Amazon Bedrock. However, CloudWatch does not provide a mechanism to examine which user made the API call.You can use CloudTrail to monitor and log API calls in AWS accounts. 
+	• CloudTrail records contain the API event, the user who made the API call, and the time that the call was made. It provides an audit trail for AWS resources, helping with security analysis, compliance auditing, and troubleshooting.
+	• Few-shot prompting with examples can help the language model learn the desired style and format for product descriptions. Few-shot prompting with examples is suitable for this scenario and requires the least operational effort. 
+	• Zero-shot prompting without examples is less effective for tasks that require a specific writing style or format. Zero-shot prompting without examples might cause the model to struggle to infer the desired output.
+	• Select the correct AWS service or feature from the following list for each task. Each AWS service or feature should be selected one or more times. (Select FIVE.)
+		§ Guardrails for Amazon Bedrock
+		§ AWS Identity and Access Management (IAM)
+			§ Implement identity verification and resource-level access control - AWS Identity and Access Management (IAM)
+			§ Set policies to avoid specific topics in a generative AI application - Guardrails for Amazon Bedrock
+			§ Filter harmful content based on defined thresholds for categories - Guardrails for Amazon Bedrock
+			§ Define user roles and permissions to access Amazon Bedrock - AWS Identity and Access Management (IAM)
+			§ Monitor and analyze user inputs to ensure compliance with safety policies - Guardrails for Amazon Bedrock
+	• Hyperparameter tuning is a method to adjust the behavior of an ML algorithm. You can make changes to an ML model by using hyperparameter tuning to modify the behavior of the algorithm.
+	• Model evaluation is a step in the ML development pipeline that occurs after model training. You can use model evaluation to evaluate a model's performance and metrics. Model evaluation does not increase the number of variables in the training dataset or modify the behavior of the algorithm.
+	• Feature engineering is a method to select and transform variables when you create a predictive model. Feature engineering includes feature creation, feature transformation, feature extraction, and feature selection. Feature engineering enhances the data by increasing the number of variables in the training dataset to ultimately improve model performance.
+	• Dimension reduction reduces the featues wihout losing significant information
+	• Model monitoring is a component of the ML lifecycle that captures data and compares the data to the training data. You can use model monitoring to identify data quality issues, model quality issues, bias drift, and feature attribution drift. Model monitoring does not increase the number of variables in the training dataset or modify the behavior of the algorithm.
+	• Data collection is a step to label, ingest, and aggregate data that you will use for ML model training. During data collection, you ingest and aggregate data from multiple sources. Then, you label the data. The data collection stage does not increase the number of variables in the training dataset or modify the behavior of the algorithm.
+	• Amazon Rekognition is a deep learning image and video analysis service. You can use Amazon Rekognition to analyze and extract insights from visual content. One of the use cases for Amazon Rekognition is the classification of products into categories by using custom labels and training a model. To meet the requirements, you must provide labeled images for training. 
+	• Amazon Polly is a text-to-speech (TTS) service that can convert text into lifelike speech. 
+	• Amazon Translate translate text between languages and don’t Transform text
+	• Amazon kinesis is to process real time data streams
+	• Amazon Textract is fully managed service that can detect and extract text and data from scanned documents, PDFs, and images. One of the use cases for Amazon Textract is to process invoices and receipts. For example, Amazon Textract can detect billing and shipping addresses automatically from images.
+	• Amazon Kendra is an intelligent search service that uses semantic and contextual understanding to provide relevant responses to a search query. It is a service that can work on unstructured data  and can understand large language queries. You cannot use Amazon Kendra to detect and extract text, handwriting, and data from invoice images.
+	• Amazon Comprehend is a natural language processing (NLP) service that can extract insights and relationships from text data. You cannot use Amazon Comprehend to process textual information from images that are provided in PNG format. Amazon Comprehend requires text as input.
+	• Amazon Transcribe(Speech to text) is a service that you can use to convert speech into text. You can use Amazon Transcribe to facilitate the transcription of audio recordings. If media contains domain-specific or non-standard terms, you can use a custom vocabulary or a custom model to improve the accuracy of the transcriptions. Examples of domain-specific or non-standard terms include brand names, acronyms, technical words, and jargon. A solution that uses a custom language model in Amazon Transcribe can improve transcription accuracy for domain-specific speech.
+	• Amazon Macie can discover, classify, and protect sensitive data that is stored in Amazon S3. Macie is useful for data security. However, Macie primarily focuses on data at rest. You cannot use Macie to secure the access and operations of Amazon Bedrock.
+	• Amazon Inspector helps you identify vulnerabilities in instances especially EC2
+	• Amazon Redshift is a data warehouse service
+	• AWS Artifact: AWS Artifact is a service that provides on-demand access to AWS’s compliance reports, agreements, and certifications. It also supports notifications and enables companies to keep track of their compliance status and related reports. When an ISV's compliance reports are available, AWS Artifact can notify users via email, making it the best choice for this scenario.
+	• Amazon Xray allows you to identify the requests that flows through the application mainly trackability
+	• Real-time inference is suitable for use cases with low latency or high throughput requirements. Real-time inference supports processing times of 60 seconds. Real-time inference provides a persistent and fully managed endpoint to handle traffic. Real-time inference offers the lowest latency requirements because of the 60-second processing times.
+	• Asynchronous inference is suitable for use cases with larger datasets and processing times of up to 1 hour. Asynchronous inference can queue incoming requests for inference processing. Asynchronous inference provides moderate latency requirements because of the processing times of up to 1 hour.
+	• Batch transform is suitable for offline processing when data can be processed in batches. Batch transform can support processing times of days. Therefore, batch transform provides the highest latency requirements of these options.
+	• In-context learning is the process of providing a few examples to help an LLM better align responses to an expected format or output. In-context learning is also referred to as few-shot prompting. In-context learning does not increase the consistency and quality of an LLM by providing the model with access to external sources of knowledge.
+	• Sage Maker endpoint allows you to get real time inference.
+	• SageMaker JumpStart is a feature of SageMaker that includes pre-trained foundation models (FMs)SageMaker JumpStart is an AWS service that provides pre-trained machine learning models, solutions, and notebooks to help users quickly build and deploy AI applications. It simplifies ML adoption by offering one-click deployment and fine-tuning of models for various use cases like NLP, computer vision, and predictive analytics.
+	• Underfitting occurs when a model does not identify the relationships in the training data. Underfitting would lead to low accuracy on both the training data and the testing data.
+	• SageMaker Model Cards to create records and to document details about ML models in a single place. SageMaker Model Cards support transparent and explainable model development by providing comprehensive, immutable documentation of essential model information.
+	• Amazon SageMaker Clarify:
+		• Purpose: SageMaker Clarify is designed to detect and mitigate bias in machine learning models and datasets. It helps ensure fairness and transparency in the models you create by analyzing datasets for biases and checking model predictions for fairness. Can explain model decisions.
+	• Amazon Sage Maker Studio - Web based IDE for ML development.
+	• Amazon S3 Glacier is a highly durable and cost-effective solution for securely storing patient records over the long term. Its encryption and retention policies align with HIPAA compliance requirements. https://aws.amazon.com/s3/storage-classes/glacier
+	
+	
+	• SageMaker JumpStart:
+		• Goal: Provides pre-built solutions, models, and templates to accelerate the start of machine learning projects. It helps users quickly get started with machine learning by offering pre-trained models, example notebooks, and complete workflows for various ML use cases.
+	• SageMaker Model Registry:
+			§ Goal: Provides a centralized repository for managing ML models throughout their lifecycle, from training to deployment. It helps track and version models, providing a way to organize, review, and manage different versions of models that are produced during the ML development process.
+	• SageMaker Wrangler - prepares and cleans data for ML
+	• Sagemaker autopilot is a fully manged machine learning service that automates building Model and training and deploying services.When you have raw tabular data and want to build a custom ML model automatically.Automatically selects algorithms, preprocesses data, and tunes hyperparameters
+	• SageMaker Model Monitor monitors the quality of ML models and data in production.SageMaker Model Monitor is used to monitor the performance of deployed models in production. It tracks the quality of model predictions over time and provides metrics and alerts if the model's behavior degrades. You cannot use SageMaker Model Monitor to create a record of essential model information such as risk ratings, training details, and evaluation results.
+	• SageMaker Ground Truth AWS SageMaker Ground Truth is a fully managed data labeling service provided by Amazon Web Services (AWS) that helps create labeled datasets for machine learning (ML) models. It is designed to assist in the process of data labeling, which is a critical step in supervised learning tasks. Ground Truth helps automate and streamline the labeling of large datasets, reducing the time and cost associated with manual labeling.You can complete a variety of human-in-the-loop tasks with SageMaker Ground Truth, from data generation and annotation to model review, customization, and evaluation, either through a self-service or an AWS-managed offering.
+	• SageMaker Model Dashboard is a central place to view, search, and explore all models in an AWS account. SageMaker Model Dashboard provides insights into model deployment, usage, performance tracking, and monitoring. You cannot use SageMaker Model Dashboard to create a record of essential model information, such as risk ratings, training details, and evaluation results. 
+	•  F1 score to evaluate a model's accuracy for binary classification. F1 scores use precision and recall to evaluate how accurate a model correctly classifies the correct class. You cannot use the F1 score to assess the performance of an FM for text generation.
+	• Recall-Oriented Understudy for Gisting Evaluation (ROUGE) -  ROUGE is a metric that you can use to evaluate the quality of text summarization and text generation. You can use ROUGE to assess the performance of an FM for text generation.
+	• Amazon Q Business is a generative AI virtual assistant that can answer questions, summarize content, generate content, and complete tasks based on the data that is provided. Amazon Q Business does not provide access to FMs. Amazon Q is not open source.Use Amazon Q Business when you need a generative AI-powered assistant to access and analyze your company's internal data across various systems, allowing employees to quickly find information, generate content, solve problems, and take action within their workflow, essentially streamlining tasks and accelerating decision-making by providing relevant insights directly within their current applications
+	• Amazon Q in Amazon QuickSight is an AI-powered query assistant (FOR BI Needs) that allows users to interact with their data using natural language. Essentially, it enables users to ask questions about their data in plain English (or other supported languages), and QuickSight automatically interprets the query to generate relevant visualizations or insights.
+	• Amazon Inspector is a vulnerability management service that continuously scans workloads for software vulnerabilities and unintended network exposure. Amazon Inspector assesses the security and compliance of your AWS resources by performing automated security checks based on best practices and common vulnerabilities. Amazon Inspector can assess EC2 instances and Amazon ECR repositories to provide detailed findings and recommendations for remediation. You can use Amazon Inspector to maintain a secure and compliant AWS environment.
+	• AWS Glue - simplifies the discovery, preparation, movement, integration and formatting of information from disparate data sources, both on premises and on the AWS cloud.AWS Glue enables data engineers to automatically profile datasets and evaluate their quality using rules and metrics. 
+	It helps identify missing data, anomalies, and inconsistencies, ensuring high-quality inputs for AI models. AWS Glue Data Quality allows you to measure and monitor the quality of your data so that you can make good business decisions.
+	• Amazon Sagemaker canvas is a Visual interface for building machine learning models without writing code.
+	• Amazon SageMaker Ground Truth is primarily used for labeling training data for machine learning models. It helps automate the data labeling process with human annotators, active learning, and pre-labeling techniques.
+	•  Amazon Augmented AI (A2I) is specifically designed to build workflows for human review of model predictions, making it the correct answer. In augmented AI human review is used to check the human predictions weras in ground truth to label the dataset to train the AI
+	• A multimodal model is an AI model that can process and understand multiple types of data (or modalities) simultaneously, such as:
+		• Text (e.g., documents, chat, code)
+		• Images (e.g., photos, diagrams)
+		• Audio (e.g., speech, music)
+		• Video (e.g., motion analysis, scene understanding)
+		• Used for Image Captioning,AI Chatbot analyze image, Speech to text
+	• Diffusion models are generative models used primarily for image generation and other computer vision tasks. Diffusion-based neural networks are trained through deep learning to progressively “diffuse” samples with random noise, then reverse that diffusion process to generate high-quality images.
+	• Auto encoders are used for dimensionality reductions
+	• Named Entity Recognition (NER) is a Natural Language Processing (NLP) technique used to identify and classify specific entities in text into predefined categories such as:
+	Common Entity Categories:
+		• Persons → Elon Musk, Albert Einstein
+		• Organizations → Google, NASA, United Nations
+		• Locations → New York, Mount Everest, Amazon River
+		• Dates & Times → January 1, 2024, 5:00 PM
+		• Monetary Values → $100, €50 million
+		• Percentages → 75%, 10% growth
+	• Linear regression is a supervised learning algorithm, logistic regerssion is also supervised learning algorithm
+	• K nearest neighbour is also supervised learning
+	•  Principal Component Analysis (PCA) is an unsupervised learning technique. It's primarily used for dimensionality reduction, meaning it aims to simplify complex datasets by finding new, uncorrelated variables (principal components) that retain as much of the original information as possible. It does not require labeled target variables.
+	•  Association Rule Mining, exemplified by algorithms like Apriori, is an unsupervised learning technique. It's used to discover relationships between variables in large datasets. A common use case is market basket analysis, where it identifies items that are frequently bought together. It works with unlabeled transactional data.
+	•  Linear Regression is specifically designed for predicting continuous values. It models the relationship between the input features (e.g., size, location, age of the house) and the target variable (house price) using a linear equation. It aims to find the best-fitting line that minimizes the difference between the predicted and actual values.
+	• Increasing temperateur makes it random
+	
