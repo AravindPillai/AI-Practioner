@@ -7,6 +7,10 @@ Sections
 	5. Security , Compliance, Governance of AI solutions - 14%
 
 
+I learned using this : https://platform.qa.com/course/navigating-vocabulary-gen-ai-5713/introduction-1725534391862/?context_id=14841&context_resource=lp
+All notes below are based on the link above. 
+
+
 • GPT - Generative Pre trained Transformers is a Transformer model based on Deep learning
 • Tempertaure determines the likelyhood of response. Varies from 0 to 1 and is most likely at 0.7. Lower temperatures means more concentrated response. Higher means more diverse response.
 • Epoch is the number of time the model has to run to train itself.
